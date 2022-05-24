@@ -1,0 +1,42 @@
+version: 2.1
+
+jobs:
+  build-job:
+    docker:
+      - image: cimg/node:12.16
+    steps:
+      - checkout
+      - run:
+          name: "Install dependency"
+          command: npm install
+
+
+  test-job:
+    docker:
+      - image: cimg/node:12.16
+    steps:
+      - checkout
+      - run:
+          name: "Install dependency"
+          command: npm install
+
+  analyze-job:
+    docker:
+      - image: cimg/node:12.16
+    steps:
+      - checkout
+      - run:
+          name: "Install dependency"
+          command: npm audit
+
+workflows:
+  integration_workflow:
+    jobs:
+      - build-job
+      - test-job:
+          requires:
+            - build-job
+      - analyze-job:
+          requires:
+            - test-job
+            - analyze-job
