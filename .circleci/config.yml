@@ -38,5 +38,6 @@ workflows:
             - build-job
       - analyze-job:
           requires:
+            - build-job
             - test-job
-            - analyze-job
+
