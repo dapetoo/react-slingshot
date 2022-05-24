@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  build-job:
+  build:
     docker:
       - image: cimg/node:12.16
     steps:
@@ -10,8 +10,12 @@ jobs:
           name: "Install dependency"
           command: npm install
 
+      - run:
+          name: "Code Linting"
+          command: npm run lint
 
-  test-job:
+
+  test:
     docker:
       - image: cimg/node:12.16
     steps:
@@ -20,7 +24,11 @@ jobs:
           name: "Install dependency"
           command: npm install
 
-  analyze-job:
+      - run:
+          name: "Run tests"
+          command: npm run test
+
+  analyze:
     docker:
       - image: cimg/node:12.16
     steps:
@@ -32,12 +40,11 @@ jobs:
 workflows:
   integration_workflow:
     jobs:
-      - build-job
-      - test-job:
+      - build
+      - test:
           requires:
-            - build-job
-      - analyze-job:
+            - build
+      - analyze:
           requires:
-            - build-job
-            - test-job
+            - test
 
